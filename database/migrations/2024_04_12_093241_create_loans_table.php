@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventories', function (Blueprint $table) {
+        Schema::create('loans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('inventory_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->integer('quantity');
+            $table->string('status');
+            $table->date('due_date')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('loans');
     }
 };
