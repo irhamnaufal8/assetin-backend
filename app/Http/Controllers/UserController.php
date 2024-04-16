@@ -12,6 +12,7 @@ class UserController extends Controller
         // Memperbolehkan superadmin dan admin melihat daftar siswa yang pending
         $userRole = $request->user()->role;
 
+        // Awal validasi akses
         if (!in_array($userRole, ['superadmin', 'admin'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -19,8 +20,14 @@ class UserController extends Controller
         $role = $request->query('role');
         $validRoles = ['siswa', 'admin']; // Valid roles yang bisa difilter
 
-        // Batasi admin untuk hanya bisa melihat siswa
-        if ($userRole === 'admin' && ($role !== 'siswa' || !$role)) {
+        // Logika penanganan role default untuk admin
+        if ($userRole === 'admin' && !$role) {
+            // Jika admin tidak menyertakan filter role, default ke 'siswa'
+            $role = 'siswa';
+        }
+
+        // Batasi admin untuk hanya bisa melihat siswa kecuali dinyatakan lain
+        if ($userRole === 'admin' && !in_array($role, ['siswa'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
