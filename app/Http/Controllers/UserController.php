@@ -4,9 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'avatar' => 'sometimes|string'
+        ]);
+
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('avatar')) {
+            $user->avatar = $request->avatar;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ], 200);
+    }
+
     public function listPendingUsers(Request $request)
     {
         // Memperbolehkan superadmin dan admin melihat daftar siswa yang pending

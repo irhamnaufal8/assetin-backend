@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\PhotoController;
 
 Route::middleware(['auth:sanctum'])->get('/loans/user', [LoanController::class, 'getUserLoans']);
 Route::apiResource('categories', CategoryController::class);
@@ -28,6 +29,10 @@ Route::get('/users/pending', [UserController::class, 'listPendingUsers'])->middl
 Route::middleware(['auth:sanctum'])->get('/users/me', [AuthController::class, 'me']);
 
 Route::get('/inventories/category/{categoryId}', [InventoryController::class, 'getByCategory']);
+
+Route::post('/photos', [PhotoController::class, 'upload'])->middleware('auth:sanctum');
+
+Route::put('/users/update-profile', [UserController::class, 'updateProfile'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'can:approve-student'])->post('/loans/{loan}/approve', [LoanController::class, 'approveLoan']);
 Route::middleware(['auth:sanctum', 'can:approve-student'])->post('/loans/{loan}/start', [LoanController::class, 'startLoan']);
