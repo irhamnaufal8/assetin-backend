@@ -23,6 +23,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 Route::middleware(['auth:sanctum', 'can:approve-admin'])->post('/users/{user}/approve-admin', [UserController::class, 'approveAdmin']);
 Route::middleware(['auth:sanctum', 'can:approve-student'])->post('/users/{user}/approve-student', [UserController::class, 'approveStudent']);
+Route::get('/users/pending', [UserController::class, 'listPendingUsers'])->middleware('auth:sanctum');
+
+Route::middleware(['auth:sanctum'])->get('/users/me', [AuthController::class, 'me']);
 
 Route::get('/inventories/category/{categoryId}', [InventoryController::class, 'getByCategory']);
 
