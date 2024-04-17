@@ -14,15 +14,17 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'sometimes|string|max:255',
-            'avatar' => 'sometimes|string'
+            'avatar' => 'sometimes|string|nullable'
         ]);
 
         if ($request->has('name')) {
             $user->name = $request->name;
         }
 
-        if ($request->has('avatar')) {
+        if ($request->filled('avatar')) {
             $user->avatar = $request->avatar;
+        } else if ($request->exists('avatar')) {
+            $user->avatar = null;
         }
 
         $user->save();

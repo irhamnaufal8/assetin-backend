@@ -15,10 +15,11 @@ class PhotoController extends Controller
 
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('public/photos');
+            $url = Storage::url($path);
 
             return response()->json([
                 'message' => 'Photo uploaded successfully',
-                'path' => $path
+                'path' => $url
             ], 201);
         }
 
