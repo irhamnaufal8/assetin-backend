@@ -9,9 +9,23 @@ use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $loans = Loan::with(['inventory', 'user'])->get();
+        $userId = $request->query('user_id');
+        $status = $request->query('status');
+
+        $query = Loan::with(['inventory', 'user']);
+
+        if (!is_null($userId)) {
+            $query->where('user_id', $userId);
+        }
+
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+
+        $loans = $query->get();
+
         return response()->json($loans);
     }
 
