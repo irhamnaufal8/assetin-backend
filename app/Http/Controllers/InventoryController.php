@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inventories = Inventory::with('category')->get();
+        $categoryId = $request->query('category_id');
+
+        if ($categoryId) {
+            $inventories = Inventory::whereHas('category', function ($query) use ($categoryId) {
+                $query->where('id', $categoryId);
+            })->with('category')->get();
+        } else {
+            $inventories = Inventory::with('category')->get();
+        }
+
         return response()->json($inventories);
     }
 
