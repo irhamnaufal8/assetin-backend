@@ -57,13 +57,26 @@ class LoanController extends Controller
         $userId = $request->user()->id;
         $status = $request->query('status');
 
-        $query = Loan::where('user_id', $userId);
+        $query = Loan::with(['inventory', 'inventory.category'])
+                    ->where('user_id', $userId);
 
         if (!is_null($status)) {
             $query->where('status', $status);
         }
 
         $loans = $query->get();
+
+        return response()->json($loans);
+    }
+
+    public function homeGetUserLoans(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $loans = Loan::with('inventory')
+                    ->where('user_id', $userId)
+                    ->whereIn('status', ['REQUEST', 'READY'])
+                    ->get();
 
         return response()->json($loans);
     }

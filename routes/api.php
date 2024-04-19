@@ -12,6 +12,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PhotoController;
 
 Route::middleware(['auth:sanctum'])->get('/loans/user', [LoanController::class, 'getUserLoans']);
+Route::middleware(['auth:sanctum'])->get('/home-loans', [LoanController::class, 'homeGetUserLoans']);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('inventories', InventoryController::class);
 Route::apiResource('loans', LoanController::class);
